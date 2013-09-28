@@ -13,28 +13,32 @@ public class HasGumballInSlotState implements State
         this.gumballMachine = gumballMachine;
     }
        
-	public void insertCoin(CoinValue coin) {
-		System.out.println("Please take gumball from the slot first and then insert coin.");
-	}
+    public void insertCoin(CoinValue coin) {
+        //System.out.println("Please take gumball from the slot first and then insert coin.");
+        gumballMachine.getHasCoinState().insertCoin(coin);
+        gumballMachine.setState(gumballMachine.getHasCoinState());
+
+    }
  
-	public void ejectCoin() {
-		System.out.println("No coins to eject. Please take gumball from the slot");
-	}
+    public void ejectCoin() {
+        System.out.println("No coins to eject. Please take gumball from the slot");
+    }
  
-	public void turnCrank() {
-		System.out.println("Please take gumball from the slot first.");
-	}
+    public void turnCrank() {
+        System.out.println("Please take gumball from the slot first.");
+    }
  
-	public void dispense() {
-			System.out.println("One gumball already in slot");
-	}
+    public void dispense() {
+            System.out.println("One gumball already in slot");
+    }
  
-	public String toString() {
-		return "Gumball in slot";
-	}
-	
-	public void takeGumball() {
-	    System.out.println("Gumball taken...");
-	    gumballMachine.setState(gumballMachine.getNoCoinState());
-	}
+    public String toString() {
+        return "Gumball in slot";
+    }
+    
+    public void takeGumball() {
+            System.out.println(gumballMachine.getNumOfGumballInSlot()+ " Gumball taken from slot.");
+            gumballMachine.setNumOfGumballInSlot(0);
+            gumballMachine.setState(gumballMachine.getNoCoinState());
+    }
 }

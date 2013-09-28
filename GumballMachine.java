@@ -1,5 +1,4 @@
 
-
 public class GumballMachine implements IGumballMachine {
  
     State soldOutState;
@@ -8,8 +7,11 @@ public class GumballMachine implements IGumballMachine {
     State soldState;
     State hasGumballInSlotState;
  
-    State state = soldOutState;
+    State state;
     int count = 0;
+    int numOfGumballInSlot = 0;
+    int currentValueOfInsertedCoins = 0;
+    public static final int gumballPrice = 50;
  
     public GumballMachine(int numberGumballs) {
         soldOutState = new SoldOutState(this);
@@ -21,9 +23,26 @@ public class GumballMachine implements IGumballMachine {
         this.count = numberGumballs;
         if (numberGumballs > 0) {
             state = noCoinState;
-        } 
+        } else {
+            state = soldOutState;
+        }
     }
     
+    public int getNumOfGumballInSlot() {
+          return this.numOfGumballInSlot;
+    }
+    
+    public void setNumOfGumballInSlot(int numOfGumballInSlot) {
+          this.numOfGumballInSlot = numOfGumballInSlot;
+    }
+    
+        public int getCurrentValueOfInsertedCoins() {
+          return this.currentValueOfInsertedCoins;
+    }
+    
+    public void setCurrentValueOfInsertedCoins(int currentValueOfInsertedCoins) {
+          this.currentValueOfInsertedCoins = currentValueOfInsertedCoins;
+    }
 
     public boolean isGumballInSlot(){
         if(getState().equals(hasGumballInSlotState)) {
@@ -49,7 +68,7 @@ public class GumballMachine implements IGumballMachine {
         state.insertCoin(CoinValue.NICKEL);
     }
  
-    public void ejectQuarter() {
+    public void ejectCoin() {
         state.ejectCoin();
     }
  
@@ -65,10 +84,22 @@ public class GumballMachine implements IGumballMachine {
     }
  
     void releaseBall() {
-        System.out.println("A gumball comes rolling out in the slot...");
         if (count != 0) {
-            count = count - 1;
+            if(getState().equals(soldState)) {
+                System.out.println("A gumball comes rolling out in the slot...");
+                count = count - 1;
+                this.currentValueOfInsertedCoins -= gumballPrice;
+                this.numOfGumballInSlot++;
+            }
+        } else {
+            System.out.println("Sorry! No Gumball to release. Machine is sold out.");
+            this.state = soldOutState;
         }
+    }
+    
+    void releaseChange(){
+        System.out.println("Releasing change: "+ this.currentValueOfInsertedCoins);
+        this.currentValueOfInsertedCoins = 0;
     }
  
     int getCount() {
@@ -114,6 +145,6 @@ public class GumballMachine implements IGumballMachine {
         }
         result.append("\n");
         result.append("Machine is " + state + "\n");
-		return result.toString();
+        return result.toString();
     }
 }

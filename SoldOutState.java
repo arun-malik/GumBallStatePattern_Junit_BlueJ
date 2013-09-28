@@ -17,6 +17,7 @@ public class SoldOutState implements State {
  
 	public void turnCrank() {
 		System.out.println("You turned, but there are no gumballs");
+		gumballMachine.releaseChange();
 	}
  
 	public void dispense() {
@@ -28,6 +29,12 @@ public class SoldOutState implements State {
 	}
 	
 	public void takeGumball() {
-	    System.out.println("No gumball in slot");
+	    if(gumballMachine.getNumOfGumballInSlot() > 0) {
+            System.out.println(gumballMachine.getNumOfGumballInSlot()+ " Gumball taken from slot.");
+            gumballMachine.setNumOfGumballInSlot(0);
+            gumballMachine.setState(gumballMachine.getNoCoinState());
+        } else {
+            System.out.println("No Gumball in slot.");
+        }
 	}
 }

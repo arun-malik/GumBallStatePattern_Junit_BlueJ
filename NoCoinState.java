@@ -29,6 +29,12 @@ public class NoCoinState implements State {
 	}
 	
 	public void takeGumball(){
-	    System.out.println("No Gumball. You need to pay first");
+	   if(gumballMachine.getNumOfGumballInSlot() > 0) {
+            System.out.println(gumballMachine.getNumOfGumballInSlot()+ " Gumball taken from slot.");
+            gumballMachine.setNumOfGumballInSlot(0);
+            gumballMachine.setState(gumballMachine.getNoCoinState());
+       } else {
+            System.out.println("No Gumball. You need to pay first.");
+       }
 	}
 }
